@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Walentynka dla Nikoli ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #ffe4e1;
+            background-image: radial-gradient(#ffb7b2 10%, transparent 10%),
+                              radial-gradient(#ffb7b2 10%, transparent 10%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .karta {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            padding: 40px 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
+            width: 100%;
+            max-width: 420px;
+            min-height: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+            z-index: 10;
+            margin: 20px 0;
+            transition: height 0.3s ease;
+        }
+
+        .kontener-gif {
+            width: 100%;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .kontener-gif img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 20px;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(255,100,100,0.2));
+            transition: opacity 0.3s ease;
+        }
+
+        .dymek {
+            position: absolute;
+            top: -25px;
+            right: 10px;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            font-weight: 800;
+            color: #d32f2f;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: scale(0.5) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            z-index: 20;
+            white-space: nowrap;
+        }
+
+        .dymek.pokaz {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #d32f2f;
+            font-weight: 900;
+            line-height: 1.3;
+            margin: 0;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 200;
+            text-align: center;
+        }
+
+        .kontener-przyciskow {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .btn {
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            transition: background-color 0.2s, color 0.2s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative; 
+        }
+
+        #przyciskTak {
+            background: linear-gradient(45deg, #ff4081, #ff6b6b);
+            color: white;
+            z-index: 1; 
+            transform-origin: center;
+        }
+
+        #przyciskNie {
+            background-color: #ffffff;
+            color: #ff6b6b;
+            border: 3px solid #ffe4e1;
+            z-index: 100; 
+        }
+
+        .modal-tlo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-tlo.aktywne {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 90%;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-tlo.aktywne .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box h3 {
+            color: #d32f2f;
+            margin-bottom: 15px;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ffe4e1;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .modal-box input:focus {
+            outline: none;
+            border-color: #ff4081;
+        }
+
+        .btn-modal {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .konfetti-serce {
+            position: absolute;
+            top: -5vh;
+            font-size: 20px;
+            animation: spadanie linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes spadanie {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+        .kupony-wrapper {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 10px;
+            animation: pojawianie 1s ease forwards;
+        }
+
+        #listaKuponow {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        @keyframes pojawianie {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kupon-naglowek {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+        }
+
+        .kupon {
+            background: #fff0f5;
+            border: 2px dashed #ff4081;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kupon:hover {
+            transform: scale(1.02);
+            background: #ffe4e1;
+        }
+
+        .kupon.odkryty {
+            background: #ff4081;
+            color: white;
+            border-style: solid;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 64, 129, 0.4);
+            cursor: default;
+        }
+
+        .kupon.odkryty::after {
+            content: "✓";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .kupon.zablokowany {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(1);
+            background: #eee;
+            border-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="soundSad" src="https://www.myinstants.com/media/sounds/sad-meow-song.mp3"></audio>
+    <audio id="soundHappy" src="https://www.myinstants.com/media/sounds/kids_cheering.mp3"></audio>
+
+    <div id="modalZagadka" class="modal-tlo">
+        <div class="modal-box">
+            <h3>Rozwiąż aby odmówić!</h3>
+            <p id="trescZagadki" style="margin-bottom: 15px; font-weight: bold; font-size: 1.2rem;">2 + 2 = ?</p>
+            <input type="number" id="inputZagadki" placeholder="Wynik...">
+            <button class="btn-modal" onclick="sprawdzZagadke()">Potwierdź</button>
+            <p id="bladInfo" class="error-msg">Źle!</p>
+        </div>
+    </div>
+
+    <div class="karta">
+        <div class="kontener-gif">
+            <div id="dymek" class="dymek">Tekst</div>
+            <img id="obrazekKota" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExanNvazUzb2J3MGlsbGNqNzIyc3lmcDEzeTZmc2ZsMWdybG4yb3RlOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TjSPQgowhhJdHgvnwA/giphy.gif" alt="Cute cat">
+        </div>
+
+        <h1 id="tekstPytania">Nikola, zostaniesz moją Walentynką? <br> ❤️🥹</h1>
+
+        <div id="sekcjaKuponow" class="kupony-wrapper">
+            <p class="kupon-naglowek">Wybierz kupon (tylko jeden!):</p>
+            <div id="listaKuponow"></div>
+        </div>
+
+        <div class="kontener-przyciskow">
+            <button class="btn" id="przyciskTak" onclick="klikniecieTak()">TAK!</button>
+            <button class="btn" id="przyciskNie" onclick="pokazZagadke()">Nie...</button>
+        </div>
+    </div>
+
+    <script>
+        const przyciskTak = document.getElementById('przyciskTak');
+        const przyciskNie = document.getElementById('przyciskNie');
+        const tekstPytania = document.getElementById('tekstPytania');
+        const obrazekKota = document.getElementById('obrazekKota');
+        const dymek = document.getElementById('dymek');
+        const kontenerPrzyciskow = document.querySelector('.kontener-przyciskow');
+        const sekcjaKuponow = document.getElementById('sekcjaKuponow');
+        const listaKuponow = document.getElementById('listaKuponow');
+        
+        const soundSad = document.getElementById('soundSad');
+        const soundHappy = document.getElementById('soundHappy');
+        
+        const modal = document.getElementById('modalZagadka');
+        const trescZagadki = document.getElementById('trescZagadki');
+        const inputZagadki = document.getElementById('inputZagadki');
+        const bladInfo = document.getElementById('bladInfo');
+
+        const linkSmutnyKot = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3BsNTJtZ2xsZXljMmR3YjN6dHh3ZzhyMWp2OHU5bm13djd4aTkxdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TZBED1pP5m8N2/giphy.gif";
+        const linkWesolyKot = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGdnODltNnp0cGZtMDFkd3JsN3M5aGhoeW96NGFqZDZlNW41ZXA2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/teTZJLUKRMzYQCN7D1/giphy.gif";
+
+        const tekstyDymka = ["Zobacz jaki smutny kotek", "No weź!", "Dlaczego?", "Proszę...", "Nie rób mi tego!", "Będę płakać!", "No zgódź się!", "Zaznacz TAK!!"];
+        
+        const opcjeKuponow = [
+            "Masaż Pleców ",
+            "Zabieram Cię na Pizzę ",
+            "Przysługa "
+        ];
+
+        let licznikKlikniec = 0;
+        let aktualnaSkala = 1;
+        let poprawnyWynik = 0;
+        let czyKuponWybrany = false;
+
+        function tasujTablice(tablica) {
+            for (let i = tablica.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tablica[i], tablica[j]] = [tablica[j], tablica[i]];
+            }
+            return tablica;
+        }
+
+        function generujKupony() {
+            listaKuponow.innerHTML = "";
+            const przetasowane = tasujTablice([...opcjeKuponow]);
+
+            przetasowane.forEach((tresc) => {
+                const div = document.createElement("div");
+                div.classList.add("kupon");
+                div.innerText = "Kliknij, aby odkryć";
+                
+                div.onclick = function() {
+                    if (czyKuponWybrany) return;
+
+                    czyKuponWybrany = true;
+                    this.innerText = tresc;
+                    this.classList.add("odkryty");
+
+                    const wszystkie = document.querySelectorAll(".kupon");
+                    wszystkie.forEach(k => {
+                        if (k !== this) {
+                            k.classList.add("zablokowany");
+                            k.innerText = "Zablokowany";
+                        }
+                    });
+                };
+                
+                listaKuponow.appendChild(div);
+            });
+        }
+
+        function generujZagadke() {
+            const a = Math.floor(Math.random() * 10) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            poprawnyWynik = a + b;
+            trescZagadki.innerText = `${a} + ${b} = ?`;
+            inputZagadki.value = "";
+            bladInfo.style.display = "none";
+        }
+
+        function pokazZagadke() {
+            generujZagadke();
+            modal.classList.add('aktywne');
+            
+            soundSad.currentTime = 0;
+            soundSad.loop = true;
+            soundSad.volume = 0.5;
+            soundSad.play().catch(e => console.log("Audio play error", e));
+        }
+
+        function sprawdzZagadke() {
+            if (parseInt(inputZagadki.value) === poprawnyWynik) {
+                soundSad.pause();
+                soundSad.currentTime = 0;
+                soundSad.loop = false;
+                
+                modal.classList.remove('aktywne');
+                uruchomEfektNie();
+            } else {
+                bladInfo.style.display = "block";
+                inputZagadki.style.borderColor = "red";
+            }
+        }
+
+        function uruchomEfektNie() {
+            licznikKlikniec++;
+            
+            if (licznikKlikniec === 1) {
+                 obrazekKota.src = linkSmutnyKot;
+            }
+
+            dymek.classList.add('pokaz');
+            
+            if (licznikKlikniec <= tekstyDymka.length) {
+                dymek.innerText = tekstyDymka[licznikKlikniec - 1];
+            } else {
+                dymek.innerText = "Nie ma innej opcji!";
+            }
+
+            aktualnaSkala += 0.5; 
+            przyciskTak.style.transform = `scale(${aktualnaSkala})`;
+        }
+
+        function klikniecieTak() {
+            soundHappy.volume = 0.4;
+            soundHappy.currentTime = 0;
+            soundHappy.loop = false;
+            soundHappy.play().catch(e => console.log("Audio play error", e));
+
+            setTimeout(() => {
+                soundHappy.pause();
+                soundHappy.currentTime = 0;
+            }, 10000);
+
+            obrazekKota.src = linkWesolyKot;
+            tekstPytania.innerHTML = "Jeeej! Superrrr!! <br> Kocham Cię! ❤️😻";
+            
+            przyciskTak.style.transform = "scale(1)";
+            kontenerPrzyciskow.style.display = 'none'; 
+            dymek.style.display = 'none';
+            
+            generujKupony();
+            sekcjaKuponow.style.display = 'flex';
+            
+            uruchomKonfetti();
+        }
+
+        function uruchomKonfetti() {
+            setInterval(() => {
+                const serce = document.createElement('div');
+                serce.classList.add('konfetti-serce');
+                serce.innerHTML = ['❤️','❤️‍🔥','😻','😍'][Math.floor(Math.random() * 4)];
+                serce.style.left = Math.random() * 100 + 'vw';
+                serce.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                serce.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                document.body.appendChild(serce);
+                
+                setTimeout(() => serce.remove(), 5000);
+            }, 200);
+        }
+    </script>
+</body>
+</html>
